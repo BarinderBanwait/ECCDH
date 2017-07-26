@@ -5,7 +5,7 @@
 p = next_prime(321456789876)
 a = -3024
 b = 46224
-E = EllipticCurve(GF(p),[a,b]) #my favourite elliptic curve, 389a1, smallest curve of rank 2 over Q (ordered by conductor)
+E = EllipticCurve(GF(p),[a,b]) # my favourite elliptic curve, 389a1, smallest curve of rank 2 over Q (ordered by conductor)
 
 # We now choose a random point on E to serve as G
 
