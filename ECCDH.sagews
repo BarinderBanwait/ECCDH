@@ -188,7 +188,7 @@ def NumberPoint(Number): # this is the main function
     NewXCoordinate = XCoordinate
     Tweak = 1
     while not Thingy.is_square():
-        Tweak = L.random_element()
+        Tweak = L.random_element()  # this is the random part of the algorithm
         if Tweak != L(0):
             NewXCoordinate = XCoordinate*Tweak
             Thingy = NewXCoordinate^3 + a*NewXCoordinate + b
