@@ -1,11 +1,12 @@
 # THE SETUP
 #
-# We first specify the domain parameters (p,a,b,G,n,h); p is a prime, a,b are the coefficients of the elliptic curve E, G is a fixed point on E, n is the order of G, and h is the cofactor of n
+# We first specify the domain parameters (p,a,b,G,n,h); p is a prime, a,b are the coefficients of the elliptic curve 
+# E, G is a fixed point on E, n is the order of G, and h is the cofactor of n
 
 p = next_prime(321456789876)
 a = -3024
 b = 46224
-E = EllipticCurve(GF(p),[a,b]) # my favourite elliptic curve, 389a1, smallest curve of rank 2 over Q (ordered by conductor)
+E = EllipticCurve(GF(p),[a,b]) # my favourite elliptic curve 389a1, smallest curve of rank 2 over Q (ordered by conductor)
 
 # We now choose a random point on E to serve as G
 
@@ -30,7 +31,11 @@ HB = dB * G         #Bob's public key
 
 S = dA * HB
 
-# So now we need a character encoding scheme, to convert messages into numbers, and back again. Here we give a simple, ad-hoc method, essentially ASCII, but shifted; a = 1, b = 2, ... z = 26, except j != 10, rather j=27, and t != 20, rather t = 28. Space between words is '00', and '0' signifies "go to the next character". The exceptions for j and t were made to distinguish between, e.g., "a ja" and "ja a" (which would otherwise both have the same value of 1001001). Also, i've kept this simple, so no capital letters, and only some special characters like !,?,@,/).
+# So now we need a character encoding scheme, to convert messages into numbers, and back again. Here we give a simple,
+# ad-hoc method, essentially ASCII, but shifted; a = 1, b = 2, ... z = 26, except j != 10, rather j=27, and t != 20,
+# rather t = 28. Space between words is '00', and '0' signifies "go to the next character". The exceptions for j and t
+# were made to distinguish between, e.g., "a ja" and "ja a" (which would otherwise both have the same value of 1001001).
+# Also, i've kept this simple, so no capital letters, and only some special characters like !,?,@,/).
 
 def CharacterNumber(foo):
     if foo == 'j':
@@ -151,7 +156,13 @@ NumberMessage("10280028080500130150220905019")
 8090020150203500101209030500805018050290023080501805001018050025015021034
 'at the movies'
 
-# OK, so now let's suppose that Alice wants to send that message securely to Bob. Having converted it into a number, she now needs to convert it into a point on the elliptic curve E. There's no canonical way of doing this, so here I do the first thing that came to my head; take the p-adic expansion of the number, and let the coefficients define an element in the corresponding finite extension of GF(p); this will then be the x-coordinate of the point on E, defined over said finite extension of GF(p). It will then have to be tweaked until the y-coordinate is also defined over this extension (and not over a quadratic). This tweaking factor, as well as the degree of the extension, must be shipped along with the encrypted message
+# OK, so now let's suppose that Alice wants to send that message securely to Bob. Having converted it into a number,
+# she now needs to convert it into a point on the elliptic curve E. There's no canonical way of doing this, so here I 
+# do the first thing that came to my head; take the p-adic expansion of the number, and let the coefficients define an
+# element in the corresponding finite extension of GF(p); this will then be the x-coordinate of the point on E, defined
+# over said finite extension of GF(p). It will then have to be tweaked until the y-coordinate is also defined over this
+# extension (and not over a quadratic). This tweaking factor, as well as the degree of the extension, must be shipped 
+# along with the encrypted message.
 
 def VectorModToVector(test): #this function needed for technical reasons
     Output = []
@@ -202,7 +213,9 @@ def MessagePoint(Message):
 MessagePoint("hi bob, alice here. where are you?")
 (([319845102371, 57454937697, 29198941433, 231070946850, 180120629743, 188663709222, 5780236955], [107659197217, 12702229585, 114860877157, 18222454894, 64492855981, 249101670176, 285135510085]), 7, [20516227883, 313926125837, 85207855702, 41799652861, 170633330261, 221103741944, 13438125046])
 
-# Having received this message, Bob works backwards - subtracts the shared secret, uses Tweak to untweak the message, and recovers the number corresponding to the message from the x-coordinate of the resulting point. He then uses the above NumberMessage to get the message. "Silver" corresponds to "Tweak"
+# Having received this message, Bob works backwards - subtracts the shared secret, uses Tweak to untweak the message, 
+# and recovers the number corresponding to the message from the x-coordinate of the resulting point. He then uses the 
+# above NumberMessage to get the message. "Silver" corresponds to "Tweak"
 
 def PointNumber(Input,N,Silver):
     L.<s> = GF(p^N)
